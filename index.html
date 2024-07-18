@@ -1,0 +1,205 @@
+   <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>weather App</title>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            body{
+                width: 100%;
+                min-height: 100vh;
+                background-image: url("/images/backImage.jpg");
+                background-position: center;
+                background-repeat: no-repeat;
+                background-size: cover;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #container{
+                background: linear-gradient(120deg, rgba(132, 130, 134, 0.263), hsla(188, 4%, 35%, 0.79));
+                backdrop-filter: blur(0px);
+                border-radius: 15px;
+                padding: 20px;
+                box-shadow: 0 0 20px black;
+            }
+            #top{
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            #top input{
+                width: 100%;
+                font-size: 20px;
+                outline: none;
+                padding: 8px 10px;
+                border-radius: 12px;
+                border: none;
+            }
+            #top img{
+                width: 30px;
+                height: 30px;
+                cursor: pointer;
+                background-color: white;
+                border-radius: 50%;
+                padding: 5px;
+            }
+            #middle{
+                display: flex;
+                flex-direction: column;
+                margin-top: 10px;
+                justify-content: center;
+                align-items: center;
+            }
+            #middle img{
+                height: 180px;
+            }
+            #middle #weather{
+                color: white;
+                font-size: 26px;
+                margin-bottom: 10px;
+                font-weight: 100;
+            }
+            #middle #cityName{
+                color: white;
+                font-size: 40px;
+                font-weight: 400;
+            }
+            #bottom{
+                display: flex;
+                justify-content: space-around;
+                margin-top: 15px;
+                color: rgb(255, 255, 255);
+                font-size: 20px;
+                text-align: center;
+            }
+            #temp{
+                color: white;
+                font-size: 26px;
+            }
+            #showData{
+                display: flex;
+                gap: 20px;
+            }
+            #wrongCity{
+                display: none;
+                color: rgb(250, 242, 242);
+                text-align: center;
+                margin-top: 10px;
+            }
+            button{
+                color: white;
+                background-color: red;
+                outline: none;
+                border: none;
+                margin-top: 10px;
+                padding: 10px 15px;
+                font-size: 20px;
+                border-radius: 10px;
+                cursor: pointer;
+            }
+            button:hover{
+                box-shadow: 0 0 20px red;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <div id="top">
+                <input type="text" placeholder="Enter City name">
+                <img src="/images/search.png" alt="" id="searchBtn">
+            </div>
+            <div id="result">
+                <div id="middle">
+                    <img src="" alt="weather-image" id="weatherImg">
+                    <div id="showData">
+                        <span id="weather"></span>
+                        <span id="temp"></span>
+                    </div>
+                    <span id="cityName"></span>
+                </div>
+                <div id="bottom">
+                    <div>
+                        <p>Wind-speed</p>
+                        <p id="wind"></p>
+                    </div>
+                    <div>
+                        <p>Humidity</p>
+                        <p id="humidity"></p>
+                    </div>
+                </div>
+            </div>
+            <div id="wrongCity">
+                <h2>You entered a wrong city name. <br> Please try again !!!</h2>
+                <button>Back</button>
+            </div>
+        </div>
+        <script>
+
+            const key = "0c121a39332b5026abd43be355fb91ae"
+            const url = "https://api.openweathermap.org/data/2.5/weather?units=metric&q="
+
+            const input = document.querySelector("input")
+            const searchBtn = document.getElementById("searchBtn")
+            const weatherImg = document.getElementById("weatherImg")
+            const weather = document.getElementById("weather")
+            const cityName = document.getElementById("cityName")
+            const temperature = document.getElementById("temp")
+            const wind = document.getElementById("wind")
+            const humidity = document.getElementById("humidity")
+            const btn = document.querySelector("button")
+
+            async function checkWeather(city){
+                let responce = await fetch(url + city + `&appid=${key}`)
+                if(responce.status == 404){
+                    document.getElementById("result").style.display = "none"
+                    document.getElementById("wrongCity").style.display = "block"
+                    btn.addEventListener("click",()=>{
+                        document.getElementById("result").style.display = "block"
+                        document.getElementById("wrongCity").style.display = "none"
+                    })
+                }else{
+                    document.getElementById("result").style.display = "block"
+                    let data = await responce.json()
+                    weather.innerText = data.weather[0].main
+                    cityName.innerText = data.name
+                    temperature.innerText = `${data.main.temp}°C`
+                    wind.innerText = `${data.wind.speed}Km/h`
+                    humidity.innerText = `${data.main.humidity}%`
+                    // console.log(data);
+
+                    if(data.weather[0].main == "Clear"){
+                        weatherImg.src = "/images/clear.png"
+                    }
+                    else if(data.weather[0].main == "Clouds"){
+                        weatherImg.src = "/images/clouds.png"
+                    }
+                    else if(data.weather[0].main == "Rain"){
+                        weatherImg.src = "/images/rain.png"
+                    }
+                    else if(data.weather[0].main == "Mist"){
+                        weatherImg.src = "/images/mist.png"
+                    }
+                    else if(data.weather[0].main == "Snow"){
+                        weatherImg.src = "/images/snow.png"
+                    }
+                    else if(data.weather[0].main == "Drizzle"){
+                        weatherImg.src = "/images/drizzle.png"
+                    }
+                }
+            }
+            checkWeather("cuttack")
+            searchBtn.addEventListener("click",()=>{
+                if(input.value.trim() == ""){
+                    alert("Please enter a city..")
+                }else{
+                    checkWeather(input.value.trim())
+                }
+            })
+        </script>
+    </body>
+    </html>
