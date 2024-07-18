@@ -12,7 +12,7 @@
             body{
                 width: 100%;
                 min-height: 100vh;
-                background-image: url("/images/backImage.jpg");
+                background-image: url("./images/backImage.jpg");
                 background-position: center;
                 background-repeat: no-repeat;
                 background-size: cover;
@@ -111,7 +111,7 @@
         <div id="container">
             <div id="top">
                 <input type="text" placeholder="Enter City name">
-                <img src="/images/search.png" alt="" id="searchBtn">
+                <img src="./images/search.png" alt="" id="searchBtn">
             </div>
             <div id="result">
                 <div id="middle">
@@ -173,22 +173,22 @@
                     // console.log(data);
 
                     if(data.weather[0].main == "Clear"){
-                        weatherImg.src = "/images/clear.png"
+                        weatherImg.src = "./images/clear.png"
                     }
                     else if(data.weather[0].main == "Clouds"){
-                        weatherImg.src = "/images/clouds.png"
+                        weatherImg.src = "./images/clouds.png"
                     }
                     else if(data.weather[0].main == "Rain"){
-                        weatherImg.src = "/images/rain.png"
+                        weatherImg.src = "./images/rain.png"
                     }
                     else if(data.weather[0].main == "Mist"){
-                        weatherImg.src = "/images/mist.png"
+                        weatherImg.src = "./images/mist.png"
                     }
                     else if(data.weather[0].main == "Snow"){
-                        weatherImg.src = "/images/snow.png"
+                        weatherImg.src = "./images/snow.png"
                     }
                     else if(data.weather[0].main == "Drizzle"){
-                        weatherImg.src = "/images/drizzle.png"
+                        weatherImg.src = "./images/drizzle.png"
                     }
                 }
             }
