@@ -164,6 +164,7 @@
                     })
                 }else{
                     document.getElementById("result").style.display = "block"
+                    document.getElementById("wrongCity").style.display = "none"
                     let data = await responce.json()
                     weather.innerText = data.weather[0].main
                     cityName.innerText = data.name
